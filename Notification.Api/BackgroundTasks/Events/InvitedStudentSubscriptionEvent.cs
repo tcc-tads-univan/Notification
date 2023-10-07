@@ -2,5 +2,6 @@
 {
     public class InvitedStudentSubscriptionEvent
     {
+        public int userId { get; set; }
     }
 }
