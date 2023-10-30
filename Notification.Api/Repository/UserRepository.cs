@@ -18,9 +18,12 @@ namespace Notification.Api.Repository
                 @"SELECT userId, Email FROM UserContact WHERE userId = @UserId", new { UserId = userId });
         }
 
-        public Task SaveUserContact(UserContact userContact)
+        public async Task SaveUserContact(UserContact userContact)
         {
-            throw new NotImplementedException();
+            using var connection = await _dbContext.CreateConnection();
+            await connection.ExecuteAsync(
+                @"INSERT INTO Users(Name, Email) VALUES (@Name,@Email)",
+                new { Name = userContact.Name, Email = userContact.Email });
         }
     }
 }

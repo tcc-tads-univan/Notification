@@ -4,48 +4,47 @@ using Notification.Api.Enums;
 using Notification.Api.Repository;
 using Notification.Api.Services.Mail;
 using RabbitMQ.Client;
+using SharedContracts;
 using SharedContracts.Events;
 
 namespace Notification.Api.BackgroundTasks.Workers
 {
-    public class InvitedStudentSubscriptionConsumer : IConsumer<InvitedStudentSubscriptionEvent>
+    public class InviteRideConsumer : IConsumer<InvitedRideEvent>
     {
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
-        public InvitedStudentSubscriptionConsumer(IUserRepository userRepository, IEmailService emailService)
+        public InviteRideConsumer(IUserRepository userRepository, IEmailService emailService)
         {
             _userRepository = userRepository;
             _emailService = emailService;
         }
-
-        public async Task Consume(ConsumeContext<InvitedStudentSubscriptionEvent> context)
+        public async Task Consume(ConsumeContext<InvitedRideEvent> context)
         {
             var userContact = await _userRepository.GetUserContactInformation(context.Message.StudentId);
 
             Email email = new Email
             {
                 DestinationEmail = userContact.Email,
-                EmailType = EmailType.DRIVER_INVITE_STUDENT_SUB
+                EmailType = EmailType.INVITE_RIDE
             };
 
             await _emailService.SendAsync(email);
         }
     }
-
-    public class InvitedStudentSubscriptionConsumerDefinition : ConsumerDefinition<InvitedStudentSubscriptionConsumer>
+    public class InviteRideConsumerDefinition : ConsumerDefinition<InviteRideConsumer>
     {
-        public InvitedStudentSubscriptionConsumerDefinition()
+        public InviteRideConsumerDefinition()
         {
-            EndpointName = "invite-subscription";
+            EndpointName = "invite-ride";
         }
-        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<InvitedStudentSubscriptionConsumer> consumerConfigurator, IRegistrationContext context)
+        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<InviteRideConsumer> consumerConfigurator, IRegistrationContext context)
         {
             if (endpointConfigurator is IRabbitMqReceiveEndpointConfigurator rabbit)
             {
                 rabbit.ConfigureConsumeTopology = false;
-                rabbit.Bind(BaseUnivanEvent.exchageName, s =>
+                rabbit.Bind(BaseCarpoolEvent.exchageName, s =>
                 {
-                    s.RoutingKey = "InviteSubscriptionEvent";
+                    s.RoutingKey = "InviteRideEvent";
                     s.ExchangeType = ExchangeType.Direct;
                 });
             }
