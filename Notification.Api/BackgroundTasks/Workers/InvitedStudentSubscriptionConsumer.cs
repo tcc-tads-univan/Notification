@@ -45,7 +45,7 @@ namespace Notification.Api.BackgroundTasks.Workers
                 rabbit.ConfigureConsumeTopology = false;
                 rabbit.Bind(BaseUnivanEvent.exchageName, s =>
                 {
-                    s.RoutingKey = "InviteSubscriptionEvent";
+                    s.RoutingKey = "InvitedStudentSubscriptionEvent";
                     s.ExchangeType = ExchangeType.Direct;
                 });
             }

@@ -19,6 +19,7 @@ namespace Notification.Api.BackgroundTasks.Workers
         {
             var userContact = new UserContact()
             {
+                UserId = context.Message.UserId,
                 Email = context.Message.Email,
                 Name = context.Message.Name
             };

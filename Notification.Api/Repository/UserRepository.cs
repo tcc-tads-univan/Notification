@@ -15,15 +15,15 @@ namespace Notification.Api.Repository
         {
             using var connection = await _dbContext.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<UserContact>(
-                @"SELECT userId, Email FROM UserContact WHERE userId = @UserId", new { UserId = userId });
+                @"SELECT UserId, Name, Email FROM UserContact WHERE UserId = @UserId", new { UserId = userId });
         }
 
         public async Task SaveUserContact(UserContact userContact)
         {
             using var connection = await _dbContext.CreateConnection();
             await connection.ExecuteAsync(
-                @"INSERT INTO Users(Name, Email) VALUES (@Name,@Email)",
-                new { Name = userContact.Name, Email = userContact.Email });
+                @"INSERT INTO Users(UserId,Name, Email) VALUES (@UserId, @Name,@Email)",
+                new { UserId = userContact.UserId, Name = userContact.Name, Email = userContact.Email });
         }
     }
 }

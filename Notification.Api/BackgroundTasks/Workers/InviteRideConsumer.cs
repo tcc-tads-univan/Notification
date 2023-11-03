@@ -44,7 +44,7 @@ namespace Notification.Api.BackgroundTasks.Workers
                 rabbit.ConfigureConsumeTopology = false;
                 rabbit.Bind(BaseCarpoolEvent.exchageName, s =>
                 {
-                    s.RoutingKey = "InviteRideEvent";
+                    s.RoutingKey = "InvitedRideEvent";
                     s.ExchangeType = ExchangeType.Direct;
                 });
             }

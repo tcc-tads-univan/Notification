@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Notification.Api/Notification.Api.csproj", "Notification.Api/"]
+COPY ./nuget.config .
 RUN dotnet restore "Notification.Api/Notification.Api.csproj"
 COPY . .
 WORKDIR "/src/Notification.Api"
