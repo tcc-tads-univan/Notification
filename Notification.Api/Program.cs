@@ -26,6 +26,8 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<AcceptedSubscriptionConsumer>(typeof(AcceptedSubscriptionConsumerDefinition));
     x.AddConsumer<CreatedUserConsumer>(typeof(CreatedUserConsumerDefinition));
     x.AddConsumer<DeclinedSubscriptionConsumer>(typeof(DeclinedSubscriptionConsumerDefinition));
+    x.AddConsumer<InviteRideConsumer>(typeof(InviteRideConsumerDefinition));
+    x.AddConsumer<DeclinedRideConsumer>(typeof(DeclinedRideConsumerDefinition));
 
     x.SetKebabCaseEndpointNameFormatter();
 

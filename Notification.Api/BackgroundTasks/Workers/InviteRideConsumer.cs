@@ -1,7 +1,5 @@
 ﻿using MassTransit;
-using Notification.Api.Domain.Entities;
 using Notification.Api.Enums;
-using Notification.Api.Repository;
 using Notification.Api.Services.Mail;
 using RabbitMQ.Client;
 using SharedContracts;
@@ -11,24 +9,14 @@ namespace Notification.Api.BackgroundTasks.Workers
 {
     public class InviteRideConsumer : IConsumer<InvitedRideEvent>
     {
-        private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
-        public InviteRideConsumer(IUserRepository userRepository, IEmailService emailService)
+        public InviteRideConsumer(IEmailService emailService)
         {
-            _userRepository = userRepository;
             _emailService = emailService;
         }
         public async Task Consume(ConsumeContext<InvitedRideEvent> context)
         {
-            var userContact = await _userRepository.GetUserContactInformation(context.Message.StudentId);
-
-            Email email = new Email
-            {
-                DestinationEmail = userContact.Email,
-                EmailType = EmailType.INVITE_RIDE
-            };
-
-            await _emailService.SendAsync(email);
+            await _emailService.ExecuteEmail(context.Message.DriverId, context.Message.StudentId, EmailType.INVITE_RIDE);
         }
     }
     public class InviteRideConsumerDefinition : ConsumerDefinition<InviteRideConsumer>

@@ -1,9 +1,10 @@
 ﻿using Notification.Api.Domain.Entities;
+using Notification.Api.Enums;
 
 namespace Notification.Api.Services.Mail
 {
     public interface IEmailService
     {
-        Task SendAsync(Email email);
+        Task ExecuteEmail(int fromUserId, int toUserId, EmailType emailType);
     }
 }
