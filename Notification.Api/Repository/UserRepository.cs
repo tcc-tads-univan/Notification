@@ -22,7 +22,7 @@ namespace Notification.Api.Repository
         {
             using var connection = await _dbContext.CreateConnection();
             await connection.ExecuteAsync(
-                @"INSERT INTO Users(UserId,Name, Email) VALUES (@UserId, @Name,@Email)",
+                @"INSERT INTO UserContact(UserId,Name, Email) VALUES (@UserId, @Name,@Email)",
                 new { UserId = userContact.UserId, Name = userContact.Name, Email = userContact.Email });
         }
     }
